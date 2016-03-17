@@ -29,6 +29,25 @@
  *
  */
 
+register_activation_hook( __FILE__, 'wp_styleguide_activate' );
+register_deactivation_hook( __FILE__, 'wp_styleguide_deactivate' );
+
+function wp_styleguide_activate() {
+	$create_page = array(
+		'post_title' => 'Styleguide',
+		'post_content' => '',
+		'post_type' => 'page',
+		'post_status' => 'private',
+	);
+
+	$new_page = wp_insert_post( $create_page );
+}
+
+function wp_styleguide_deactivate() {
+	$page = get_page_by_title( 'Styleguide' );
+	wp_delete_post( $page->ID, true );
+}
+
 function wp_styleguide_page_template( $template ) {
 	if ( is_page( 'styleguide' ) ) {
 		$page_template = dirname( __FILE__ ) . '/includes/wp-styleguide-page-template.php';
